@@ -2,13 +2,13 @@ use crate::metadata::config::PublisherConfig;
 use crate::{PhotoDestination, Upload, UploadError};
 use log::{debug, info};
 use reqwest::{multipart, Client};
-use ring::digest::{digest, SHA1};
-use serde::Deserialize;
+use ring::digest::{digest, SHA1_FOR_LEGACY_USE_ONLY};
+use serde::{Deserialize, Serialize};
 use std::time::SystemTime;
 
 pub(crate) struct Cloudinary;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub(crate) struct CloudinaryConfig {
   pub(crate) cloud_name: String,
   pub(crate) api_key: String,
@@ -39,7 +39,7 @@ impl PhotoDestination for Cloudinary {
       "public_id={}&tags={}&timestamp={}{}",
       photo.metadata.title, upload_tags, timestamp, config.api_secret
     );
-    let signed_params = digest(&SHA1, cloudinary_params.as_bytes());
+    let signed_params = digest(&SHA1_FOR_LEGACY_USE_ONLY, cloudinary_params.as_bytes());
     let signed_string = format!("{:?}", signed_params).replace("SHA1:", "");
 
     match multipart::Form::new()

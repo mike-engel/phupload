@@ -42,8 +42,6 @@ impl Metadata {
 		let regex = Regex::new("^(?P<k>.+): (?P<v>.+)$").unwrap();
 
 		for line in lines {
-			dbg!(line);
-
 			if let "" = line {
 				continue;
 			}
@@ -105,8 +103,6 @@ impl Metadata {
 					.unwrap_or(&String::from("1"))
 					.parse::<i32>()
 					.unwrap_or(1);
-
-				dbg!(width, height);
 
 				height * 1200 / width
 			},

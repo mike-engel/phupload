@@ -1,10 +1,10 @@
 mod metadata;
 mod publishers;
 
-use crate::publishers::cloudinary::Cloudinary;
-// use crate::publishers::flickr::Flickr;
 use crate::metadata::config::read_config;
 use crate::metadata::exif::{get_metadata, Metadata};
+use crate::publishers::cloudinary::Cloudinary;
+use crate::publishers::flickr::Flickr;
 use crate::publishers::script::Script;
 use clap::{App, Arg, ArgMatches};
 use metadata::config::PublisherConfig;
@@ -88,6 +88,10 @@ fn main() -> Result<(), UploadError> {
         for script in scripts {
             Script::upload(script, &photo_to_upload)?;
         }
+    }
+
+    if let Some(flickr_config) = config.flickr {
+        Flickr::upload(flickr_config, &photo_to_upload)?;
     }
 
     Ok(())

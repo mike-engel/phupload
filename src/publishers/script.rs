@@ -1,14 +1,14 @@
 use crate::metadata::config::PublisherConfig;
 use crate::{PhotoDestination, Upload, UploadError};
 use log::{debug, info};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 use serde_json::{json, to_string};
 use std::path::Path;
 use std::process::Command;
 
 pub(crate) struct Script;
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub(crate) struct ScriptConfig {
   pub(crate) path: String,
 }
@@ -34,8 +34,6 @@ impl PhotoDestination for Script {
       "createdAt": photo.metadata.created_at,
       "tags": photo.metadata.tags
     });
-
-    dbg!(&config.path);
 
     let result = Command::new(&config.path)
       .arg(to_string(&data).unwrap())

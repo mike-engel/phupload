@@ -23,7 +23,7 @@ The usage is fairly simple, but requires some setup beforehand.
 
 Add a `config.toml` file to `$HOME/.config/phupload/` to start configuration. This file is in the toml format, which is pretty basic (I think). I may entertain different file types later on!
 
-Here's an example for all publishing types
+Here's an example for all publishing types. For more information for Flickr, see the [extra documentation](#flickr) below.
 
 ```toml
 [cloudinary]
@@ -33,7 +33,19 @@ api_secret = "AbO1cdE2f3gHIjKLMOp4qrstUV5"
 
 [[script]]
 path = "/Users/mike/projects/portfolio/add_photo.sh"
+
+[flickr]
+oauth_client_key = "a0986b896d0896c0986e0896f0896g89"
+oauth_client_secret = "875a9875875d5987"
+oauth_access_token = "98398637964097309-a876c876d87f9786"
+oauth_access_token_secret = "875876c876c876d8"
 ```
+
+#### Flickr
+
+In order to use flickr, you must first set up an app in their ["app garden"](https://www.flickr.com/services/). From there, the `key` becomes `oauth_client_key` and the `secret` becomes `oauth_client_secret`.
+
+If you already have an access token and access secret, then you can add those to the configuration as `oauth_access_token` and `oauth_access_token_secret`, respectively. If not, the first time you use the flickr integration, it will create and save them for you.
 
 ### Running
 
