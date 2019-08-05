@@ -80,7 +80,10 @@ impl Metadata {
 				.unwrap_or(&String::from(""))
 				.to_title_case(),
 			description: data.get("Description").unwrap_or(&String::from("")).into(),
-			created_at: data.get("Description").unwrap_or(&String::from("")).into(),
+			created_at: data
+				.get("DateTimeCreated")
+				.unwrap_or(data.get("DateTimeOriginal").unwrap_or(&String::from("")))
+				.into(),
 			tags: {
 				let tags_str = data.get("Keywords").unwrap_or(&String::from("")).to_owned();
 				let tag_list: Vec<&str> = tags_str.split(", ").collect();
@@ -126,6 +129,7 @@ pub(crate) fn get_metadata(path: &str) -> Result<Metadata, UploadError> {
 			"-Keywords",
 			"-Description",
 			"-DateTimeCreated",
+			"-DateTimeOriginal",
 			"-d %Y-%m-%dT%H:%M:%S%z",
 			path,
 		])
