@@ -9,6 +9,7 @@ use crate::publishers::script::Script;
 use clap::{App, Arg, ArgMatches};
 use metadata::config::PublisherConfig;
 use simplelog::{LevelFilter, TermLogger};
+use log::debug;
 
 #[derive(Debug)]
 pub(crate) enum UploadError {
@@ -68,6 +69,8 @@ fn main() -> Result<(), UploadError> {
 	let config = read_config()?;
 	let photo_path = matches.value_of("PATH").unwrap();
 	let metadata = get_metadata(photo_path)?;
+
+	debug!("metadata: {:?}", metadata);
 
 	let mut photo_to_upload = Upload {
 		path: photo_path,

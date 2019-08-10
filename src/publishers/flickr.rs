@@ -9,7 +9,7 @@ use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::io::{BufRead, BufReader, Write};
 use std::net::TcpListener;
-use std::time::SystemTime;
+use std::time::{Duration, SystemTime};
 use url::Url;
 use urlencoding::encode;
 
@@ -267,6 +267,8 @@ impl PhotoDestination for Flickr {
 	type Config = FlickrConfig;
 
 	fn upload(config: Self::Config, photo: &Upload) -> Result<String, UploadError> {
+		info!("Beginning upload to Flickr...");
+
 		let auth_config = match config.oauth_access_token {
 			Some(_) => config,
 			None => {
@@ -278,7 +280,10 @@ impl PhotoDestination for Flickr {
 				final_config
 			}
 		};
-		let client = Client::new();
+		let client = Client::builder()
+			.timeout(Duration::from_secs(120))
+			.build()
+			.unwrap();
 		let timestamp = Oauth::timestamp();
 		let nonce = Oauth::nonce();
 		let key = Oauth::key(

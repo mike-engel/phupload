@@ -32,7 +32,7 @@ impl PhotoDestination for Cloudinary {
 
 		let public_id = photo.metadata.title.replace(" ", "-");
 		let client = Client::builder()
-			.timeout(Duration::from_secs(60))
+			.timeout(Duration::from_secs(120))
 			.build()
 			.unwrap();
 		let timestamp = SystemTime::now()
@@ -67,6 +67,8 @@ impl PhotoDestination for Cloudinary {
 					.multipart(post_data)
 					.send()
 					.and_then(|mut cloudinary_res| {
+						debug!("cloudinary response: {:?}", cloudinary_res);
+
 						error_header = String::from(
 							cloudinary_res
 								.headers()

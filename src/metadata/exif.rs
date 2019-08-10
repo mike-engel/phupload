@@ -82,7 +82,7 @@ impl Metadata {
 			description: data.get("Description").unwrap_or(&String::from("")).into(),
 			created_at: data
 				.get("DateTimeCreated")
-				.unwrap_or(data.get("DateTimeOriginal").unwrap_or(&String::from("")))
+				.unwrap_or(data.get("DateTimeOriginal").unwrap())
 				.into(),
 			tags: {
 				let tags_str = data.get("Keywords").unwrap_or(&String::from("")).to_owned();
@@ -130,7 +130,8 @@ pub(crate) fn get_metadata(path: &str) -> Result<Metadata, UploadError> {
 			"-Description",
 			"-DateTimeCreated",
 			"-DateTimeOriginal",
-			"-d %Y-%m-%dT%H:%M:%S%z",
+			"-d",
+			"%Y-%m-%dT%H:%M:%S%z",
 			path,
 		])
 		.output()
